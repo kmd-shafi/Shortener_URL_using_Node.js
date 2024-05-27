@@ -4,15 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home Page</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+    </style>
   </head>
   <body>
     <h1>Url Shortener</h1>
+    <% if (locals.id) { %>
+    <p>URL Generate :http://localhost:3000/url/<%= id %></p>
+    <% } %>
     <div>
-      <form method="POST" ,action="/url">
+      <form method="POST" action="/url">
         <label>Enter Your Original URL</label>
         <input type="text" name="url" placeholder="https://example.com" />
         <button type="submit">Generate</button>
       </form>
+    </div>
+    <div>
+      <% if (locals.urls) { %>
+      <table>
+        <tr>
+          <th>S.No</th>
+          <th>ShortID</th>
+          <th>Redirect</th>
+          <th>Clicks</th>
+        </tr>
+        <tr>
+          <% urls.forEach((url,index) => { %>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><%= url.shortId %></td>
+          <td><%= url.redirectURL %></td>
+          <td><%= url.visitHistory.length %></td>
+        </tr>
+          <% }) %>
+        </tr>
+      </table>
+      <% } %>
     </div>
   </body>
 </html>
