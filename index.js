@@ -1,16 +1,24 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const port = 3000;
 const Urlrouter = require("./routes/url");
 const { connectToMongoDB } = require("./connection");
 const URL = require("./model/url");
+const static = require("./routes/static");
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/url", Urlrouter);
+app.use("/", static);
 
 connectToMongoDB("mongodb://localhost:27017/short-url");
 
-app.get("/:shortId", async (req, res) => {
+app.set("view engine", "ejs");
+app.set("views", path.resolve("./views"));
+
+app.get("/url/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
   const entry = await URL.findOneAndUpdate(
     { shortId },
